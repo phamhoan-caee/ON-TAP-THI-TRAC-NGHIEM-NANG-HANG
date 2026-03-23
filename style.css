@@ -356,3 +356,27 @@ input:checked + .slider {
 input:checked + .slider:before { 
     transform: translateX(26px); 
 }
+/* Màu cho đáp án đúng */
+.option-item.correct {
+    background-color: #d4edda; /* Xanh lá nhạt */
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+/* Màu cho đáp án sai */
+.option-item.wrong {
+    background-color: #f8d7da; /* Đỏ nhạt */
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+/* Khung hiển thị lời giải thích */
+.explanation-box {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e2e3e5; /* Xám nhạt */
+    border-left: 5px solid #6c757d;
+    color: #383d41;
+    border-radius: 4px;
+    display: none; /* Ẩn mặc định */
+}
