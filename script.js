@@ -1,6 +1,6 @@
 // --- 1. CẤU HÌNH ---
 // THẦY DÁN LINK CSV CÔNG BỐ TỪ GOOGLE SHEETS VÀO ĐÂY
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/XXXXX/pub?output=csv";
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRCf-F3dCvJi6pr4elMqwG9YrNtmB-GWds7YCmf09JbTv8AY3gtrwXpcMXc8KTQmpuJhc0al2jSBR4B/pub?gid=1176419369&single=true&output=csv";
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwxGySySYeE0wsg-41K5lTQUYgL_beTxmCGagDfwQO1AUxLs_l8K4iGMgz-jKE9sxc/exec";
 
 // --- 2. BIẾN TRẠNG THÁI ---
