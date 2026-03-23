@@ -234,3 +234,31 @@ async function submitQuiz(force = false) {
     // Tải lại trang sẽ xóa sạch dữ liệu cũ và đưa học viên về màn hình bắt đầu
     location.reload();
 }
+// --- XỬ LÝ CHẾ ĐỘ THI/ÔN TẬP ---
+const modeToggle = document.getElementById('modeToggle');
+const modeText = document.getElementById('modeText');
+
+// Kiểm tra trạng thái đã lưu trước đó (nếu có)
+const savedMode = localStorage.getItem('examMode');
+if (savedMode === 'practice' && modeToggle) {
+    modeToggle.checked = true;
+    if(modeText) {
+        modeText.innerText = "Ôn tập (Có giải thích)";
+        modeText.style.color = "#007bff";
+    }
+}
+
+// Lắng nghe sự kiện gạt nút
+if (modeToggle) {
+    modeToggle.addEventListener('change', function() {
+        if (this.checked) {
+            modeText.innerText = "Ôn tập (Có giải thích)";
+            modeText.style.color = "#007bff";
+            localStorage.setItem('examMode', 'practice');
+        } else {
+            modeText.innerText = "Thi sát hạch";
+            modeText.style.color = "#ff6600";
+            localStorage.setItem('examMode', 'exam');
+        }
+    });
+}
