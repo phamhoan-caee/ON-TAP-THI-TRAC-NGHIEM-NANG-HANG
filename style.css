@@ -328,3 +328,74 @@ input:checked + .slider:before { transform: translateX(26px); }
     line-height: 1.6;
     box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
 }
+/* ============================================================
+   BỔ SUNG CSS: BIẾN NÚT CHỌN ĐÁP ÁN THÀNH NÚT BẤM KỸ THUẬT XE NÂNG
+   ============================================================ */
+
+/* 1. Thiết kế lại ô đáp án cơ bản: Bo góc vuông, hiệu ứng 3D nhẹ */
+.option-item {
+    border: 2px solid #ddd; /* Tăng độ dày viền */
+    border-radius: 4px;      /* Bo góc ít hơn để tạo cảm giác cứng cáp */
+    padding: 18px 25px;     /* Tăng diện tích bấm */
+    background: linear-gradient(180deg, #ffffff 0%, #f1f1f1 100%); /* Hiệu ứng dập nổi 3D nhẹ */
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.8), /* Đổ bóng sáng phía trên */
+        0 2px 4px rgba(0,0,0,0.1);           /* Đổ bóng tối phía dưới */
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease-in-out;
+}
+
+/* 2. Hiệu ứng khi di chuột (Hover): Đổi sang màu vàng công nghiệp */
+.option-item:hover {
+    background: linear-gradient(180deg, #ffe066 0%, #ffd11a 100%); /* Vàng cam dập nổi */
+    border-color: #e6b800;
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-2px); /* Nút nhô lên nhẹ */
+}
+
+/* Thêm biểu tượng mũi tên kỹ thuật khi Hover */
+.option-item:hover::after {
+    content: '➤'; /* Biểu tượng mũi tên */
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #cc9900;
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* 3. Hiệu ứng khi nút được CHỌN (trong chế độ Thi) */
+.option-item.selected {
+    background: linear-gradient(180deg, #3366ff 0%, #0044cc 100%) !important; /* Xanh đậm hơn */
+    border-color: #003399 !important;
+    color: white !important;
+    box-shadow: 
+        inset 0 2px 5px rgba(0,0,0,0.3), /* Đổ bóng bên trong tạo cảm giác nút đã được nhấn xuống */
+        0 1px 1px rgba(255,255,255,0.1);
+    transform: translateY(1px); /* Nút lún xuống nhẹ */
+}
+
+.option-item.selected .option-label {
+    color: white !important;
+    font-weight: bold;
+}
+
+/* 4. Hiệu ứng đáp án ĐÚNG (chế độ Ôn tập) - Giữ nguyên màu xanh lá sát hạch nhưng thêm hiệu ứng nhấn */
+.option-item.correct {
+    background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%) !important;
+    border-color: #219150 !important;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+    transform: translateY(1px);
+}
+
+/* 5. Hiệu ứng đáp án SAI (chế độ Ôn tập) - Giữ nguyên màu đỏ sát hạch nhưng thêm hiệu ứng nhấn */
+.option-item.wrong {
+    background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%) !important;
+    border-color: #a93226 !important;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+    transform: translateY(1px);
+}
