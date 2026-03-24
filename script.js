@@ -23,13 +23,13 @@ function loadQuestionsFromSheets() {
                     question: row.CauHoi,
                     options: [row.A, row.B, row.C, row.D].filter(opt => opt),
                     answer: row.DapAnDung ? row.DapAnDung.trim() : "",
-                    explanation: row.GiaiThich || "Không có giải thích chi tiết."
+                    // Lệnh này giúp đọc cả cột "GiaiThich" hoặc "Giải thích"
+                    explanation: row["Giải thích"] || row["GiaiThich"] || row.GiaiThich || "Chưa có nội dung giải thích cho câu này."
                 }));
             console.log("Đã tải thành công " + allQuestions.length + " câu hỏi.");
         }
     });
 }
-window.onload = loadQuestionsFromSheets;
 
 // --- 4. HÀM BẮT ĐẦU THI ---
 function startQuiz() {
