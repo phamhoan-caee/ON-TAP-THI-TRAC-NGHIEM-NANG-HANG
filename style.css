@@ -1,52 +1,362 @@
-/* --- ĐỊNH DẠNG MÀU SẮC CHUẨN SÁT HẠCH (DÁN VÀO CUỐI FILE) --- */
-
-/* 1. Đáp án ĐÚNG: Màu xanh lá */
-.option-item.correct {
-    background-color: #28a745 !important;
-    border-color: #1e7e34 !important;
-    color: #ffffff !important;
+/* --- 1. BIẾN MÀU SẮC & CẤU HÌNH CHUNG --- */
+:root {
+    --caee-blue: #003399;      /* Màu xanh đậm chủ đạo (background) */
+    --header-blue: #0040cc;    /* Màu xanh thanh header */
+    --btn-orange: #ff6600;    /* Màu cam nút bấm */
+    --btn-blue: #3366ff;      /* Màu xanh nút điều hướng */
+    --bg-light: #f4f7f6;      /* Màu nền vùng câu hỏi và sidebar */
+    --text-dark: #333333;     /* Màu chữ chính */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --transition: all 0.2s ease;
 }
 
-/* Đảm bảo chữ bên trong (A, B, C, D) cũng màu trắng */
-.option-item.correct .option-label, 
-.option-item.correct .option-text {
-    color: #ffffff !important;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--caee-blue); /* Nền xanh đậm toàn màn hình */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+    line-height: 1.5;
+    overflow-x: hidden;
+    padding-top: 60px; /* Chừa chỗ cho header fixed */
 }
 
-/* 2. Đáp án SAI: Màu đỏ đô */
-.option-item.wrong {
-    background-color: #dc3545 !important;
-    border-color: #bd2130 !important;
-    color: #ffffff !important;
+/* --- 2. HEADER BAR (THANH TRÊN CÙNG) --- */
+.caee-header {
+    background-color: var(--header-blue);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
-/* Đảm bảo chữ bên trong màu trắng */
-.option-item.wrong .option-label,
-.option-item.wrong .option-text {
-    color: #ffffff !important;
+.header-title { display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 0.95rem; }
+.header-info { display: flex; align-items: center; gap: 15px; }
+.student-id-display { font-size: 0.85rem; opacity: 0.9; }
+
+.timer-box {
+    background-color: #ff3333; /* Màu đỏ cho đồng hồ */
+    padding: 4px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 1.1rem;
 }
 
-/* 3. Nút điều hướng (TRƯỚC/TIẾP): Màu xanh dương chuyên nghiệp */
+/* --- 3. MÀN HÌNH CHÀO MỪNG (WELCOME PAGE) --- */
+#start-screen {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-container {
+    background: white;
+    width: 90%;
+    max-width: 550px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Cột bên trái (Xanh) */
+.welcome-left {
+    background-color: var(--caee-blue);
+    color: white;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+.welcome-left img { width: 50px; margin-bottom: 15px; }
+.welcome-left h5 { font-size: 0.9rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Cột bên phải (Trắng) */
+.welcome-right {
+    width: 65%;
+    padding: 30px;
+}
+.school-name { font-weight: bold; color: #333; font-size: 1rem; margin-bottom: 5px; text-align: start; }
+.faculty-name { color: var(--header-blue); font-size: 0.8rem; font-weight: bold; margin-bottom: 20px; text-align: start; }
+
+.form-group { margin-bottom: 15px; text-align: start; }
+.form-group label { font-size: 0.8rem; color: #777; font-weight: bold; }
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+.form-control:focus { border-color: var(--header-blue); background-color: white; outline: none; }
+
+.btn-start {
+    background-color: var(--btn-orange);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 10px;
+}
+.btn-start:hover { background-color: #e65c00; }
+
+.footer-welcome { font-size: 0.7rem; color: #bbb; margin-top: 25px; text-align: center; }
+
+/* --- 4. CẤU TRÚC MÀN HÌNH THI (MAIN EXAM PAGE) --- */
+#quiz-screen {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 280px; /* Cột câu hỏi rộng, cột lưới hẹp */
+    gap: 20px;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Vùng câu hỏi */
+#quiz-content {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.subject-badge { background: #e6f0fa; color: var(--caee-blue); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+.q-count { color: #999; font-size: 0.85rem; }
+
+.question-text { font-size: 1.1rem; font-weight: bold; margin-bottom: 25px; color: #222; }
+
+/* Tùy chỉnh ô đáp án */
+.option-item {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.option-item:hover { background-color: #fafafa; border-color: #ddd; }
+.option-item.selected { background-color: #e6f0fa; border-color: var(--caee-blue); }
+.option-label { color: #555; font-size: 0.95rem; flex: 1; }
+
+/* Vùng nút điều hướng: Thêm justify-content để ép 2 nút ra 2 đầu */
+.navigation-btns { 
+    display: flex; 
+    justify-content: space-between; /* Đẩy nút đầu sang trái, nút cuối sang phải */
+    width: 100%; /* Đảm bảo khung nút giãn hết chiều ngang câu hỏi */
+    margin-top: 30px; 
+}
+
 .btn-nav {
-    background-color: #007bff !important;
-    color: white !important;
-    border: none !important;
-    padding: 10px 25px !important;
-    font-weight: bold !important;
-    text-transform: uppercase !important;
+    padding: 10px 20px; /* Tăng nhẹ kích thước cho dễ bấm trên điện thoại */
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.btn-nav:hover {
-    background-color: #0056b3 !important;
+/* Nút TRƯỚC: Màu xanh */
+.btn-prev { 
+    background-color: var(--btn-blue); 
+    color: white; 
 }
 
-/* 4. Khung giải thích: Làm nổi bật hơn */
+/* Nút TIẾP: Màu xanh */
+.btn-next { 
+    background-color: var(--btn-blue); 
+    color: white; 
+}
+
+/* Hiệu ứng khi di chuột */
+.btn-prev:hover, .btn-next:hover {
+    background-color: #0044cc;
+    opacity: 0.9;
+}
+/* --- 5. CỘT SƠ ĐỒ CÂU HỎI (RIGHT SIDEBAR) --- */
+.sidebar-right { display: flex; flex-direction: column; gap: 20px; }
+
+.question-grid-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+.sidebar-title { font-size: 0.85rem; font-weight: bold; color: #666; margin-bottom: 15px; }
+
+/* Lưới 5x6 */
+.q-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+.grid-item {
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    color: var(--caee-blue);
+    height: 38px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.grid-item:hover { border-color: var(--caee-blue); }
+.grid-item.answered { background: var(--caee-blue); color: white; border-color: var(--caee-blue); }
+.grid-item.active { border: 2px solid var(--btn-orange); background: white; color: var(--caee-blue); }
+
+/* Vùng trạng thái màu */
+.status-legend-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    box-shadow: var(--shadow-sm);
+}
+.legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-green { background-color: var(--caee-blue); } /* Màu xanh trong hình */
+.dot-orange { background-color: var(--btn-orange); }
+
+/* Nút nộp bài */
+.btn-submit {
+    background-color: #ff3333; /* Đỏ rực rỡ */
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.btn-submit:hover { background-color: #cc0000; }
+
+/* --- 6. HỖ TRỢ ĐIỆN THOẠI (RESPONSIVE) --- */
+@media (max-width: 992px) {
+    #quiz-screen { grid-template-columns: 1fr; } /* Chuyển thành 1 cột */
+    .welcome-container { flex-direction: column; width: 95%; }
+    .welcome-left, .welcome-right { width: 100%; padding: 25px; }
+    .header-info { gap: 10px; }
+    .student-id-display { font-size: 0.75rem; padding-right: 10px; }
+    .timer-box { font-size: 0.95rem; padding: 4px 10px; }
+}
+/* --- Căn giữa tiêu đề (Thêm vào cuối file) --- */
+.welcome-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.school-name {
+    width: 100%;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.faculty-name {
+    width: 100%;
+    font-weight: bold;
+    color: #0056b3;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+/* --- PHẦN CHẾ ĐỘ ÔN TẬP (TOGGLE SWITCH) --- */
+.mode-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.mode-label { 
+    font-weight: bold; 
+    color: #333; 
+}
+
+.mode-status { 
+    font-weight: bold; 
+    color: #ff6600; /* Màu cam giống nút Bắt đầu */
+} 
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0; 
+    width: 0; 
+    height: 0; 
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+@@ -356,3 +356,27 @@
+input:checked + .slider:before { 
+    transform: translateX(26px); 
+}
+/* Màu cho đáp án đúng */
+.option-item.correct {
+    background-color: #d4edda; /* Xanh lá nhạt */
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+/* Màu cho đáp án sai */
+.option-item.wrong {
+    background-color: #f8d7da; /* Đỏ nhạt */
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+/* Khung hiển thị lời giải thích */
 .explanation-box {
-    border-left: 5px solid #28a745 !important;
-    background-color: #f8f9fa !important;
-    color: #333 !important;
-    padding: 15px !important;
-    margin-top: 15px !important;
-    border-radius: 4px !important;
-    font-style: italic !important;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e2e3e5; /* Xám nhạt */
+    border-left: 5px solid #6c757d;
+    color: #383d41;
+    border-radius: 4px;
+    display: none; /* Ẩn mặc định */
 }
