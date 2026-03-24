@@ -99,6 +99,26 @@ function showQuestion(index) {
     updateGridStatus(index);
 }
 
+    content.innerHTML = `
+        <div class="question-header"><span class="q-count">Câu ${index + 1}/30</span></div>
+        <div class="question-text">${q.question}</div>
+        <div class="options-group">${optionsHtml}</div>
+        
+        <div id="explanation-box" class="explanation-box" style="display: ${storedAnswer && mode === 'practice' ? 'block' : 'none'};">
+            <strong style="color: #0056b3;">💡 Giải thích:</strong> 
+            <span>${q.explanation || "Đang cập nhật nội dung giải thích..."}</span>
+        </div>
+
+        <div class="navigation-btns">
+            <button class="btn-nav btn-prev" onclick="prevQuestion()" ${index === 0 ? 'style="visibility:hidden;"' : ''}>‹ TRƯỚC</button>
+            <button class="btn-nav btn-next" onclick="${index === selectedQuestions.length - 1 ? 'submitQuiz()' : 'nextQuestion()'}">
+                ${index === selectedQuestions.length - 1 ? 'NỘP BÀI ›' : 'TIẾP ›'}
+            </button>
+        </div>
+    `;
+    updateGridStatus(index);
+}
+
 // --- 6. XỬ LÝ CHỌN ĐÁP ÁN ---
 function selectAnswer(element, qIndex, answer) {
     if (isSubmitted) return; 
