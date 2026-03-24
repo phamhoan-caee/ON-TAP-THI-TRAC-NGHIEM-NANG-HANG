@@ -52,7 +52,7 @@ function startQuiz() {
     startTimer();
 }
 
-// --- 5. HIỂN THỊ CÂU HỎI (CẬP NHẬT ĐỂ HIỆN GIẢI THÍCH) ---
+// --- 5. HIỂN THỊ CÂU HỎI (CẬP NHẬT: HIỆN GIẢI THÍCH KHI CÓ ĐÁP ÁN) ---
 function showQuestion(index) {
     currentQuestionIndex = index;
     const q = selectedQuestions[index];
@@ -63,12 +63,13 @@ function showQuestion(index) {
     let optionsHtml = "";
     q.options.forEach((opt) => {
         let extraClass = "";
-        // Nếu đã trả lời và đang ở chế độ ôn tập, hiện màu ngay khi quay lại câu cũ
-        if (storedAnswer && mode === 'practice') {
-            if (opt === q.answer) extraClass = "correct";
-            else if (opt === storedAnswer.selectedAnswer) extraClass = "wrong";
-        } else if (storedAnswer && storedAnswer.selectedAnswer === opt) {
-            extraClass = "selected";
+        if (storedAnswer) {
+            if (mode === 'practice') {
+                if (opt === q.answer) extraClass = "correct";
+                else if (opt === storedAnswer.selectedAnswer) extraClass = "wrong";
+            } else if (storedAnswer.selectedAnswer === opt) {
+                extraClass = "selected";
+            }
         }
 
         optionsHtml += `
@@ -81,8 +82,8 @@ function showQuestion(index) {
         <div class="question-header"><span class="q-count">Câu ${index + 1}/30</span></div>
         <div class="question-text">${q.question}</div>
         <div class="options-group">${optionsHtml}</div>
-        <div id="explanation-box" class="explanation-box" style="display: ${storedAnswer && mode === 'practice' ? 'block' : 'none'}">
-            <strong>Giải thích:</strong> ${q.explanation}
+        <div id="explanation-box" class="explanation-box" style="display: ${storedAnswer && mode === 'practice' ? 'block' : 'none'}; margin-top: 15px; padding: 10px; background: #f8f9fa; border-left: 4px solid #007bff;">
+            <strong style="color: #d9534f;">Giải thích:</strong> ${q.explanation}
         </div>
         <div class="navigation-btns">
             <button class="btn-nav" onclick="prevQuestion()" ${index === 0 ? 'style="visibility:hidden;"' : ''}>‹ TRƯỚC</button>
@@ -94,17 +95,16 @@ function showQuestion(index) {
     updateGridStatus(index);
 }
 
-// --- 6. XỬ LÝ CHỌN ĐÁP ÁN (SỬA LẠI THEO YÊU CẦU) ---
+// --- 6. XỬ LÝ CHỌN ĐÁP ÁN (CẬP NHẬT: HIỆN ĐÚNG/SAI NGAY LẬP TỨC) ---
 function selectAnswer(element, qIndex, answer) {
-    if (isSubmitted) return;
+    if (isSubmitted) return; 
     const mode = localStorage.getItem('examMode') || 'exam';
     const q = selectedQuestions[qIndex];
 
-    // Lưu đáp án
     const existingIndex = studentAnswers.findIndex(item => item.qIndex === qIndex);
+    if (mode === 'practice' && existingIndex !== -1) return;
+
     if (existingIndex !== -1) {
-        // Nếu ở chế độ ôn tập, không cho chọn lại câu đã hiện đáp án để tránh gian lận điểm ảo
-        if (mode === 'practice') return; 
         studentAnswers[existingIndex].selectedAnswer = answer;
     } else {
         studentAnswers.push({ qIndex: qIndex, selectedAnswer: answer });
@@ -113,16 +113,15 @@ function selectAnswer(element, qIndex, answer) {
     const options = element.parentElement.querySelectorAll('.option-item');
     
     if (mode === 'practice') {
-        // Chế độ ôn tập: Hiện đúng/sai ngay lập tức
         options.forEach(opt => {
             const txt = opt.querySelector('.option-label').innerText;
             opt.classList.remove('selected', 'correct', 'wrong');
             if (txt === q.answer) opt.classList.add('correct');
             if (txt === answer && answer !== q.answer) opt.classList.add('wrong');
         });
-        document.getElementById('explanation-box').style.display = 'block';
+        const expBox = document.getElementById('explanation-box');
+        if(expBox) expBox.style.display = 'block';
     } else {
-        // Chế độ thi: Chỉ đánh dấu đã chọn
         options.forEach(opt => opt.classList.remove('selected'));
         element.classList.add('selected');
     }
@@ -170,7 +169,7 @@ function startTimer() {
     }, 1000);
 }
 
-// --- 10. NỘP BÀI ---
+// --- 10. NỘP BÀI (CẬP NHẬT: GỬI DỮ LIỆU CHUẨN XÁC) ---
 async function submitQuiz(force = false) {
     if (isSubmitted) return;
     if (!force && !confirm("Bạn có chắc chắn muốn nộp bài?")) return;
@@ -180,23 +179,33 @@ async function submitQuiz(force = false) {
 
     let score = 0;
     studentAnswers.forEach(ans => {
-        if (ans.selectedAnswer === selectedQuestions[ans.qIndex].answer) score++;
+        const q = selectedQuestions[ans.qIndex];
+        if (ans.selectedAnswer === q.answer) score++;
     });
 
     const status = score >= 25 ? "ĐẠT" : "KHÔNG ĐẠT";
-    alert(`Kết quả: ${score}/30 câu - ${status}`);
+    const name = document.getElementById('studentName').value;
+    const id = document.getElementById('studentID').value;
+
+    alert(`Kết quả của bạn: ${score}/30 câu - Trạng thái: ${status}`);
 
     const payload = {
-        name: document.getElementById('studentName').value,
-        id: document.getElementById('studentID').value,
+        name: name,
+        id: id,
         score: score + "/30",
         status: status,
         sheetName: "Ketquananghang"
     };
 
     try {
-        await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-    } catch (e) { console.error(e); }
+        await fetch(WEB_APP_URL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            body: JSON.stringify(payload) 
+        });
+    } catch (e) { 
+        console.error("Lỗi gửi dữ liệu:", e); 
+    }
 
     setTimeout(() => { location.reload(); }, 1000);
 }
